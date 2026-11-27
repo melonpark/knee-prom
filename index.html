@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>무릎 기능 설문</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#F6F8F7;--paper:#FFF;--ink:#16212B;--ink-2:#4B5763;--line:#D9DED9;--sel:#2E6B4F;--sel-soft:#E4F0EA;--warn:#9B3B2E;--ok:#1B7F5C}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--ink);font-size:18px;line-height:1.45;padding-bottom:120px;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+header h1{font-size:20px;font-weight:700}header h1 small{font-weight:400;color:var(--ink-2);font-size:13px;margin-left:8px}
+.mode{font-size:13px;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--paper);white-space:nowrap}
+.steps{display:flex;gap:6px;margin-bottom:16px}.steps span{flex:1;height:6px;border-radius:3px;background:var(--line)}.steps span.done{background:var(--ok)}.steps span.cur{background:var(--sel)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.card h2{font-size:15px;font-weight:600;color:var(--ink-2);margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.card h2 b{font-weight:600;color:var(--ink);font-size:16px}.card h2 .pts{font-size:13px;font-weight:400;text-align:right}
+.intro{font-size:15px;color:var(--ink-2);margin-bottom:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid .full{grid-column:1/-1}
+label.f{display:block;font-size:13px;color:var(--ink-2);margin-bottom:4px}
+input[type=text],input[type=date],input[type=number]{width:100%;font:inherit;font-size:18px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#FAFBFA;color:var(--ink)}
+input:focus,button:focus-visible{outline:2px solid var(--sel);outline-offset:1px}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex-wrap:wrap}.seg button{flex:1;min-width:60px;font:inherit;font-size:15px;padding:11px 4px;border:0;background:#FAFBFA;color:var(--ink-2);cursor:pointer}.seg button.on{background:var(--sel);color:#fff}
+.q{border-top:1px solid var(--line);padding:14px 0}.q:first-child{border-top:0;padding-top:4px}
+.q .t{font-size:17px;font-weight:600;margin-bottom:8px;display:flex;gap:8px}.q .t .no{color:var(--ink-2);font-weight:500;min-width:30px;flex-shrink:0}
+.sidelab{font-size:14px;color:var(--sel);font-weight:600;margin:6px 0 4px}
+.scale{display:flex;gap:6px;flex-wrap:wrap}.scale button{flex:1;min-width:42px;font:inherit;font-size:18px;font-weight:600;min-height:50px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink-2);cursor:pointer}.scale button.on{background:var(--sel);border-color:var(--sel);color:#fff}
+.anchors{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-top:4px;padding:0 4px}.anchors.big{font-size:16px;font-weight:600;color:var(--ink);margin:2px 0 10px}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font:inherit;font-size:16px;text-align:left;width:100%;min-height:48px}
+.opt .pt{font-size:13px;color:var(--ink-2);flex-shrink:0}.opt.on{background:var(--sel-soft);border-color:var(--sel);color:var(--sel)}.opt.on .pt{color:var(--sel);font-weight:600}
+.opts.row{flex-direction:row;flex-wrap:wrap}.opts.row .opt{width:auto;flex:1 1 auto;justify-content:center;min-height:44px;padding:9px 12px;font-size:15px}
+.chk{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:16px;cursor:pointer;user-select:none}.chk input{width:22px;height:22px;accent-color:var(--sel)}
+.sub{display:flex;justify-content:space-between;font-size:15px;color:var(--ink-2);border-top:1px solid var(--line);padding-top:10px;margin-top:6px}.sub b{color:var(--ink);font-variant-numeric:tabular-nums}
+.hint{font-size:13px;color:var(--ink-2);margin-top:8px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);padding:12px 16px;box-shadow:0 -6px 20px rgba(22,33,43,.06)}
+.bar .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px}.bar .st{font-size:14px;color:var(--ink-2)}.bar .miss{font-size:13px;color:var(--warn)}
+.btns{margin-left:auto;display:flex;gap:8px}
+.btn{font:inherit;font-size:16px;font-weight:600;padding:12px 18px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap}
+.btn.p{background:var(--sel);color:#fff;border-color:var(--sel)}.btn.big{width:100%;padding:16px;font-size:18px}.btn:disabled{opacity:.4;cursor:default}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.qrwrap{text-align:center;padding:8px 0}.qrwrap>div:first-child{display:inline-block;padding:12px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.qrurl{font-size:12px;color:var(--ink-2);word-break:break-all;margin-top:8px}
+.summary{width:100%;border-collapse:collapse;font-size:16px}.summary td{padding:9px 4px;border-top:1px solid var(--line)}.summary td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}.summary tr.h td{font-weight:700;color:var(--sel);border-top:2px solid var(--line)}
+.done{text-align:center;padding:16px 8px}.done .big{font-size:26px;font-weight:700;margin-bottom:6px}.done p{color:var(--ink-2)}
+.savebox{text-align:center;padding:14px;border-radius:12px;border:1px solid var(--line);background:#FAFBFA}.savebox .sv{font-size:19px;font-weight:600}.savebox.ok{background:#E8F5EE;border-color:var(--ok);color:var(--ok)}.savebox.err{background:#FBECEA;border-color:var(--warn);color:var(--warn)}.savebox .tools{display:none;justify-content:center;margin-top:10px}.savebox.err .tools{display:flex}
+.hidden{display:none!important}
+.dx{display:grid;grid-template-columns:1fr auto auto;gap:6px 8px;align-items:center;font-size:15px}.dx .seg{min-width:120px}.dx input{padding:8px;font-size:15px;width:90px}
+@media (max-width:520px){.grid{grid-template-columns:1fr}.dx{grid-template-columns:1fr auto}.dx input{grid-column:2}}
+@media print{.bar,.tools,.mode,.steps,.noprint{display:none!important}body{background:#fff;padding:0}.card{break-inside:avoid;border-color:#bbb}}
+</style></head><body><div class="wrap">
+<header><h1>무릎 기능 설문 <small>서울성모병원 정형외과</small></h1><span class="mode" id="modeTag">외래</span></header>
+<div class="steps" id="steps"></div>
+
+<div class="page" data-page="info">
+<section class="card"><h2><b>환자 정보</b><span class="pts">직원 입력</span></h2>
+  <div class="grid">
+    <div><label class="f">등록번호</label><input type="text" id="pid" inputmode="numeric" placeholder="예) 12345678"></div>
+    <div><label class="f">이름 (선택)</label><input type="text" id="pname" placeholder="홍길동"></div>
+    <div><label class="f">작성일</label><input type="date" id="pdate"></div>
+    <div><label class="f">지표 무릎</label><div class="seg" data-key="side"><button data-v="R">오른쪽</button><button data-v="L">왼쪽</button><button data-v="B">양측</button></div></div>
+    <div class="full"><label class="f">구분</label><div class="seg" data-key="track"><button data-v="tkra">1. TKRA</button><button data-v="lig">2. 인대 손상</button><button data-v="inj">3. 주사 치료</button></div></div>
+    <div class="full"><label class="f">시점</label><div class="seg" data-key="visit" id="visitSeg"></div></div>
+    <div class="full"><label class="f">시행할 설문</label><div class="opts row" id="useBox"></div></div>
+  </div>
+</section>
+<section class="card noprint" id="qrCard"><h2><b>환자 휴대폰으로 보내기</b><span class="pts">문자 발송 또는 QR</span></h2>
+  <div class="tools"><button class="btn" id="bQR">QR 만들기</button><button class="btn" id="bLink">링크 복사</button></div>
+  <div class="qrwrap hidden" id="qrbox"><div id="qr"></div><div class="qrurl" id="qrurl"></div></div>
+</section>
+<button class="btn p big" id="bStart">환자에게 태블릿 건네기 →</button>
+</div>
+
+<div id="pages"></div>
+
+<div class="page hidden" data-page="done">
+<section class="card"><div class="done"><div class="big">작성이 끝났습니다. 감사합니다.</div><p id="doneMsg"></p></div>
+  <div class="savebox" id="saveBox"><div class="sv" id="saveMsg">저장 중…</div><div class="tools"><button class="btn" id="bRetry">다시 저장</button><button class="btn" id="bShowQR">QR로 대신 전달</button></div></div>
+  <div class="qrwrap hidden" id="qr2box"><div id="qr2"></div><p class="hint">진료실에서 이 QR 코드를 보여주세요.</p></div></section>
+<section class="card" id="staffCard"><h2><b>결과 요약</b><span class="pts" id="sumMeta"></span></h2><table class="summary" id="sumTbl"></table></section>
+<section class="card noprint" id="toolCard"><h2><b>직원 메뉴</b></h2>
+  <div class="tools"><button class="btn" id="bCopy">EMR 형식 복사</button><button class="btn" id="bCSV">CSV 다운로드</button><button class="btn" id="bJSON">JSON 다운로드</button><button class="btn" id="bPrint">인쇄 / PDF</button><button class="btn" id="bSend">시트로 전송</button><button class="btn p" id="bNew">새 환자</button></div>
+  <div class="hint" id="sendHint"></div></section>
+</div>
+</div>
+<div class="bar"><div class="in"><span class="st" id="stepTag"></span><span class="miss" id="missTag"></span>
+  <div class="btns"><button class="btn" id="bPrev">이전</button><button class="btn p" id="bNext">다음 →</button></div></div></div>
+
+<script>
+(function(){
+const SAVE_URL='';   // Google Apps Script 웹앱 URL
+const AUTO_RESET_SEC=0;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const P=new URLSearchParams(location.search);
+const MODE=P.get('mode')==='patient'?'patient':'clinic';
+const SIDE_KO={R:'오른쪽',L:'왼쪽',B:'양측'};
+const TRACK_KO={tkra:'TKRA',lig:'인대 손상',inj:'주사 치료'};
+const VISITS={tkra:[['preop','술전'],['6m','6개월'],['1y','1년'],['2y','2년'],['3y','3년'],['4y','4년'],['5y','5년'],['other','기타']],
+  lig:[['6m','6개월'],['1y','1년'],['2y','2년'],['other','기타']],
+  inj:[['i6m','첫 주사 후 6개월'],['i1y','첫 주사 후 1년'],['other','기타(6개월 단위)']]};
+const TRACK_INST={tkra:['womac','sf36','pd','csi'],lig:['ikdc','koos','lysholm'],inj:['womac','sf36']};
+const seg={side:'',track:'',visit:''};
+const n=v=>v===null||v===undefined||v===''?null:+v;
+const R1=x=>x===null?null:Math.round(x*10)/10;
+
+// ===================== 설문 정의 =====================
+// item: {k, t, type:'scale'|'opts'|'num'|'text'|'yn', vals, labels, side(bool: 좌우 각각)}
+const SC04=[0,1,2,3,4];
+const WOMAC_T={pain:['평지를 걸을 때','계단을 오르내릴 때','밤에 잠을 잘 때, 즉 수면을 방해하는 통증','앉아 있을 때 혹은 누워 있을 때','똑바로 서 있을 때'],
+ stiff:['아침에 막 잠에서 깼을 때 당신이 느끼는 뻣뻣한 정도는 얼마나 심합니까?','오후에 (의자에) 앉거나, 눕거나, 쉬고 난 후에 당신이 느끼는 뻣뻣한 정도는 얼마나 심합니까?'],
+ func:['계단을 내려갈 때','계단을 올라갈 때','앉아 있다가 일어설 때','서 있을 때','바닥에 몸을 구부릴 때','평지를 걸을 때','승용차나 버스를 타거나 내릴 때','시장을 보러 갈 때','양말이나 스타킹을 신을 때','이부자리에서 일어날 때','양말이나 스타킹을 벗을 때','이부자리에 누울 때','욕조에 들어가고 나올 때','(의자에) 앉아 있을 때','양변기에 앉거나 일어설 때','힘든 일을 할 때','가벼운 일을 할 때']};
+const SF_L5A=['항상 그랬다','대부분 그랬다','어느 정도 그랬다','가끔 그랬다','전혀 없었다'];
+const SF_L5B=['언제나 그랬다','대부분 그랬다','어느정도 그랬다','약간의 시간동안 그랬다','거의 그렇지 않았다'];
+const SF_TF=['확실히 그렇다','거의 그렇다','모르겠다','거의 아니다','확실히 아니다'];
+const SF36_T3=['달리기, 무거운 물건 들기, 격렬한 운동에 참여하기 등의 활발한 신체활동','책상을 움직이기, 진공청소기로 청소하기, 볼링, 골프 등의 중등도의 신체활동','식품 등을 들거나 운반하기(시장보기)','계단 서너 층 오르기','계단 한 층 오르기','허리를 구부리기, 무릎 꿇기, 혹은 쪼그려 앉기','약 1.5km 정도 걷기(정상걸음 20분 정도)','도로 몇 블록(골목)을 걷기 (수백 m가량)','도로 한 블록(골목)을 걷기 (100m 가량)','혼자서 목욕하기 혹은 스스로 옷입기'];
+const SF36_T4=['일이나 다른 활동을 하는데 시간을 줄여야만 했다.','원하는 만큼(하고 싶은) 일을 할 수가 없었다.','할 수 있는 일이나 활동의 종류에 제한이 있었다.','일이나 다른 활동을 수행하는데 어려움이 있었다. (할 수는 있었지만 추가 노력이 필요하였다.)'];
+const SF36_T5=['일이나 다른 활동을 하는데 시간을 줄여야만 했다.','원하는 만큼 일을 할 수가 없었다.','일이나 다른 활동을 전과 같이 주의 깊게(집중) 할 수 없었다.'];
+const SF36_T9=['의욕이 넘쳐 났습니까?','매우 신경질적인 사람이었습니까?','너무 우울하여 어떤 일로도 기운이 나지 않았습니까?','평온하고 태평한 느낌이었습니까?','기운이 많았습니까?','낙담하고 우울하였습니까?','지치고 탈진 한 것으로 느꼈습니까?','즐거운 사람이었습니까?','피곤함을 느꼈습니까?'];
+const SF36_T11=['다른 사람에 비해서 쉽게 병에 걸리는 것 같다','내가 아는 다른 어떤 사람보다도 건강하다','내 건강은 나빠질 것 같다','내 건강은 매우 좋다'];
+const PD_T=['무릎에 타는 듯한 통증이 있습니까? (찌르는 듯한 통증)','무릎이 저리거나 개미가 기어다니는 듯한 느낌 또는 전기가 통한 것과 같은 따끔거리는 느낌이 있습니까?','무릎에 옷이 닿거나 이불이 스치는 정도의 가벼운 통증도 통증으로 느껴집니까?','무릎에 전기 충격이 가해지는 것과 같이 갑작스러운 통증이 있습니까?','무릎에 차갑거나 더운 자극이 가해졌을 때 (목욕물) 이따금씩 통증으로 느껴집니까?','무릎이 마취된 것과 같이 남의 살과 같은 느낌이 있습니까?','무릎을 손가락으로 살며시 누르는 정도도 통증으로 느껴집니까?'];
+const CSI_T=['늘 피곤하고 아침에 일어날 때 상쾌하지 않다.','나의 근육은 경직되고 통증이 있다.','불안감이 엄습할 때가 있다.','이(치아)를 갈거나 꽉 문다.','변비나 설사가 있다.','일상생활에 타인의 도움이 필요하다.','밝은 불빛에 민감하다.','활동시 쉽게 피로를 느낀다.','전신에 통증을 느낀다.','두통이 있다.','방광에 불편감과 소변시에 화끈거리는 느낌이 있다.','잠을 깊이 자지 못한다.','집중을 잘 하지 못한다.','건조하거나 가렵거나 발진 같은 피부 문제가 있다.','스트레스는 나의 신체 증상을 더 악화시킨다.','슬프고 우울하다.','에너지가 별로 없다.','나의 목과 어깨 근육은 늘 긴장하고 있다.','턱에 통증이 있다.','향수 같은 특정 냄새에 나는 어지럽고 구역질이 난다.','소변을 자주 본다.','밤에 잠 자려 할 때 다리(종아리)가 불편하거나, 불안하여 가만히 있기가 어렵다.','무언가를 기억하기가 힘들다.','나는 어렸을 적 트라우마로 고통받는다.','골반에 통증이 있다.'];
+const CSI_DX=['하지 불안 증후군','만성 피로 증후군','섬유근육통','측두 하악(턱관절) 장애','편두통 또는 긴장성 두통','과민성 대장 증후군','다발성 화학물질 과민증','경추손상(편타성 손상)','불안장애 또는 공황장애','우울증'];
+const IK_ACT=['매우 심한 운동: 축구/농구','심한 운동: 스키와 테니스','보통의 운동: 달리기와 조깅','가벼운 운동: 집안일, 산책','아파서 위의 운동은 불가능하다'];
+const IK9=['계단을 오르는데 어느 정도의 노력이 필요한가?','계단을 내려가는데 어느 정도의 노력이 필요한가?','무릎을 꿇을 수 있는가? 어느 정도의 노력이 필요한가?','쪼그려 앉을 수 있는가? 어느 정도의 노력이 필요한가?','양반다리를 하고 앉을 수 있는가? 어느 정도의 노력이 필요한가?','의자에서 쉽게 일어날 수 있는가? 어느 정도의 노력이 필요한가?','달릴 수 있는가? 어느 정도의 노력이 필요한가?','줄넘기를 할 수 있는가? 어느 정도의 노력이 필요한가?','빠르게 달리다가 갑자기 멈출 수 있는가? 어느 정도의 노력이 필요한가?'];
+const KO_FREQ=['전혀 없음','1개월에 한번','1주일에 한번','매일','항상'];
+const KO_NONE=['전혀 없음','거의 없음','가끔 있음','종종 있음','항상 있음'];
+const KO_ALW=['항상 있음','종종 있음','가끔 있음','거의 없음','전혀 없음'];
+const KO_STIFF=['전혀 없음','약간의 경직','중등도의 경직','심한 경직','극도의 경직'];
+const KO_PAIN=['전혀 없음','약간의 통증','중등도의 통증','심한 통증','극도의 통증'];
+const KO_DIFF=['전혀 없음','약간 어려움','중등도 어려움','심한 어려움','불가능'];
+const KO_S=['당신의 무릎에 부종(붓기)가 있었나요?','당신의 무릎에 갈리는 느낌, 삐걱거리는 소리, 그 외 어떤 다른 소리가 느껴지는 증상이 있었나요?','무릎을 움직일 때 잠김현상(갑자기 잠겨서 펴거나 굽힐 수 없는 증상)이 있었나요?','당신의 무릎을 최대한 쭉 펼 수 있었나요?','당신의 무릎을 최대한 굽힐 수 있었나요?','아침에 일어나서 처음 느끼는 무릎의 경직성은 어느 정도 인가요?','저녁 무렵 앉거나 눕거나 휴식할 때 느끼는 무릎의 경직성은 어느 정도 인가요?'];
+const KO_P=['얼마나 자주 무릎 통증을 느끼십니까?','무릎을 비틀거나 회전시킬 때','무릎을 최대한 펼 때','무릎을 최대한 굽힐 때','평지를 걸을 때','계단을 올라가거나 내려갈 때','밤에 잠을 자는 동안','앉거나 누웠을 때','똑바로 섰을 때'];
+const KO_A=['계단 내려가기','계단 올라가기','앉았다 일어나기','서있기','바닥을 향해 무릎을 구부리거나 물건을 줍기','평지 걷기','차를 타거나 내리기','쇼핑 하기 / 시장 보기','양말이나 스타킹을 신기','잠자리에서 일어나기','양말이나 스타킹 벗기','잠자리에서 무릎으로 돌아눕기','목욕탕 욕조에 들어가거나 나올 때','앉기','화장실 변기에 앉거나 일어날 때','가사 일 중 중노동에 속한 것(무거운 물건 옮기기, 마루 닦기 등)','가사 일 중 가벼운 것(요리, 먼지제거 등)'];
+const KO_SP=['쪼그려 앉을 때','달릴 때','뛰어 오를 때','다친 무릎으로 회전하거나 비틀 때','무릎을 꿇을 때'];
+const KO_Q=[['당신의 무릎에 대한 문제점을 얼마나 자주 인식하나요?',KO_FREQ],['당신의 무릎에 해가 되는 활동을 피하기 위해 당신의 생활관을 개선하려고 하나요?',['전혀 없음','약간의 개선','중등도의 개선','많은 개선','완전한 개선']],['당신의 무릎에 대한 자신감 결여로 얼마나 어려움을 겪나요?',['전혀 없음','약간의 어려움','중등도의 어려움','심한 어려움','극도의 어려움']],['전체적으로, 당신의 무릎에 얼마나 많은 불편이 있나요?',['전혀 없음','약간의 불편','중등도의 불편','심한 불편','극도의 불편']]];
+const LY=[['걷는데 발을 절뚝거리는가?',[[5,'없다'],[3,'가끔/때때로/많이 걸으면'],[0,'지속적으로/거의 항상/심하게']]],
+ ['지팡이, 보행기 등의 보조구를 사용하는가?',[[5,'사용하지 않음'],[3,'가끔/특정 경우에 한정하여/힘들때만'],[0,'항상/거의']]],
+ ['무릎관절을 폈다 구부릴 때 "딱"하고 걸리는 느낌 혹은 동작을 멈추게 만드는 통증이나 감각 등이 있는가?',[[15,'없다'],[10,'느낌은 있지만 동작을 방해하지는 않는다'],[6,'가끔 동작의 방해를 받는다'],[2,'자주 동작의 방해를 받는다(생활에 불편함이 있다)'],[0,'거의 항상 방해를 받는다(생활이 불가함)']]],
+ ['무릎 관절에 힘이 갑자기 빠지는 느낌이나 불안정한 느낌이 있는가?',[[25,'없다'],[20,'드물게, 힘든 운동이나 활동 시'],[15,'운동을 할 때 자주 해당 증상 발생하여 해당 운동을 지속하기가 어려움'],[10,'일상 생활에서도 해당 증상을 느끼는가? (운동할 때 이외에도 해당되는가?)'],[5,'일상 생활에서 자주 느낌'],[0,'일상 생활 도중 항상']]],
+ ['통증 여부/정도',[[25,'없다'],[20,'힘든 운동 뒤 가끔 발생'],[15,'힘든 운동을 할 때는 꽤 심한 통증이 발생(운동을 멈춰야 할 정도로)'],[10,'중장거리: 약 1.6km정도(버스 4정거장) 보행 이후 심한 통증이 발생'],[5,'단거리 보행에도 심한 통증이 발생'],[0,'통증이 항상 있음']]],
+ ['Swelling of knee joint (무릎 부종)',[[10,'부어있지 않다'],[6,'힘든 운동 뒤 부음'],[2,'일상 생활 이후에도 부음'],[0,'항상 부어있음']]],
+ ['계단을 오르내릴 때',[[10,'문제 없음'],[6,'문제가 있어서 난간에 의지하나 올라갈 수 있음'],[2,'문제가 있어 난간을 잡고 한 번에 한 칸씩 오르는 정도'],[0,'문제가 있어 오를 수 없음']]],
+ ['쪼그리고 앉는 자세(squatting자세, 쪼그리고 앉아서 대변 보는 자세, 주저앉은 자세)',[[5,'별 문제 없이 자세를 취할 수 있음'],[4,'문제가 있어 불편하지만 자세를 취할 수는 있음'],[2,'엉거주춤하게 자세를 취할 수 있으나 완전히 주저 앉을 수 없음(슬관절이 90도 이상 flexion되지 못함)'],[0,'불가능함(통증, 불안정함 등으로)']]]];
+
+const sides=()=>seg.side==='B'?['L','R']:seg.side?[seg.side]:['R'];
+const opt=(labels,vals)=>({type:'opts',labels,vals:vals||labels.map((_,i)=>i)});
+const INST={
+ womac:{name:'WOMAC',sub:'관절염 자가 증상 조사 설문지 · 슬관절',intro:'총 24문항에 대하여 지표 무릎이 <b>지난 24시간 동안</b> 느꼈던 통증·뻣뻣함·일상생활의 어려움을 표시해 주십시오. (0 없음 ~ 4 매우 심함)',bilateral:true,
+  sections:()=>[
+   {h:'통증 — 얼마나 심한 통증이 있었습니까?',items:WOMAC_T.pain.map((t,i)=>({k:'q'+(i+1),t,no:i+1,type:'scale',vals:SC04,side:1}))},
+   {h:'뻣뻣함 — 뻣뻣한 정도는 얼마나 심합니까?',items:WOMAC_T.stiff.map((t,i)=>({k:'q'+(i+6),t,no:i+6,type:'scale',vals:SC04,side:1}))},
+   {h:'신체적 기능 — 어느 정도의 어려움이 있었습니까?',items:WOMAC_T.func.map((t,i)=>({k:'q'+(i+8),t,no:i+8,type:'scale',vals:SC04,side:1}))},
+   {h:'전반적 증상 평가 — 지난 24시간 동안 귀하의 무릎 관절염이 귀하에게 미친 모든 점들을 고려하였을 때, 어떠하였는지 표시하십시오.',items:[{k:'global',t:'전반적 증상 평가',type:'opts',labels:['1점 - 매우 양호','2점 - 양호','3점 - 보통','4점 - 나쁨','5점 - 매우 나쁨'],vals:[1,2,3,4,5],side:1}]}],
+  score:(a)=>{const out=[];for(const s of sides()){const g=k=>a[k+'_'+s];const sum=(from,to)=>{let t=0;for(let i=from;i<=to;i++){const v=g('q'+i);if(v==null)return null;t+=v;}return t;};
+    out.push([SIDE_KO[s]+' Pain (/20)',sum(1,5)],[SIDE_KO[s]+' Stiffness (/8)',sum(6,7)],[SIDE_KO[s]+' Function (/68)',sum(8,24)],[SIDE_KO[s]+' Total (/96)',sum(1,24)],[SIDE_KO[s]+' 전반적 평가 (1–5)',g('global')]);}return out;}},
+ sf36:{name:'SF-36 건강상태조사',sub:'SF-36 Health Survey v2',intro:'본 설문지는 환자분이 건강 상태에 대해 본인 스스로 판단하는 36가지의 질문으로 구성되어 있습니다. 정확한 대답을 하기 어려운 질문은 가장 근접한 답에 표시해 주십시오.',
+  sections:()=>[
+   {h:'1. 일반적 건강 상태',items:[{k:'q1',t:'전반적으로 당신의 건강상태는 어떻다고 할 수 있습니까?',...opt(['더할 나위 없이 좋다','매우 좋다','좋다','그저 그렇다','나쁘다'],[1,2,3,4,5])}]},
+   {h:'2. 건강 상태 변화',items:[{k:'q2',t:'1년 전과 비교하여 지금 당신의 건강은 전반적으로 어느 정도라고 할 수 있습니까?',...opt(['훨씬 더 좋아졌다','약간 더 좋아졌다','대략 같다','약간 더 나빠졌다','훨씬 더 나빠졌다'],[1,2,3,4,5])}]},
+   {h:'3. 신체적 기능 — 다음은 평소와 다름없는 날 당신이 하는 활동에 대한 질문입니다. 건강 때문에 이러한 활동들에 제한을 받습니까? 만일 그렇다면 어느 정도로 제한을 받습니까?',items:SF36_T3.map((t,i)=>({k:'q3_'+(i+1),t,no:i+1,...opt(['많이 제한 받는다','약간 제한 받는다','전혀 제한받지 않는다'],[1,2,3]),row:1}))},
+   {h:'4. 신체적 활동 제한 — 지난 한달 동안 신체적인 건강 문제 때문에 일상생활이나 직업상 다음과 같은 문제들을 경험한 것이 전체 시간 중 어느 정도를 차지합니까?',items:SF36_T4.map((t,i)=>({k:'q4_'+(i+1),t,no:i+1,...opt(SF_L5A,[1,2,3,4,5]),row:1}))},
+   {h:'5. 정서적 활동 제한 — 지난 한달 동안 정서적인 문제(예를 들면 우울하거나 불안한 것 등) 때문에 일상이나 직업상 다음과 같은 문제들을 경험한 것이 전체 시간 중 어느 정도를 차지합니까?',items:SF36_T5.map((t,i)=>({k:'q5_'+(i+1),t,no:i+1,...opt(SF_L5A,[1,2,3,4,5]),row:1}))},
+   {h:'6. 사회적 기능, 제한 정도',items:[{k:'q6',t:'지난 한달 동안 신체적 건강이나 정서적인 문제로 해서 가족이나 친구, 이웃 혹은 단체, 모임에서 정상적인 활동을 하지 못한 것은 어느 정도입니까?',...opt(['전혀 그렇지 않다','약간 그렇다','어느 정도 그렇다','꽤 된다','매우 심하다'],[1,2,3,4,5]),row:1}]},
+   {h:'7. 신체 통증 정도',items:[{k:'q7',t:'지난 한달 동안 신체의 통증은 어느 정도 느꼈습니까?',...opt(['거의 없다','아주 약간 느꼈다','약간 느꼈다','어느 정도 느꼈다','심하게 느꼈다','매우 심하게 느꼈다'],[1,2,3,4,5,6]),row:1}]},
+   {h:'8. 신체 통증에 의한 활동 제한',items:[{k:'q8',t:'지난 한달 동안 신체적인 통증이 정상적인 일을(집 밖과 안의 일을 모두 포함해서) 방해한 것은 어느 정도나 됩니까?',...opt(['전혀 아니다','약간 그랬다','어느정도 그랬다','꽤 그랬다','심하게 그랬다'],[1,2,3,4,5]),row:1}]},
+   {h:'9. 활력 및 정신건강 — 다음은 지난 한달 동안 당신이 어떻게 느꼈는가 하는 것과 어떤 일들이 벌어졌는가 하는 것에 대한 질문입니다. 각 질문에 대하여 당신이 느낀 것과 가장 가까운 것에 표시하여 주십시오.',items:SF36_T9.map((t,i)=>({k:'q9_'+(i+1),t,no:i+1,...opt(SF_L5B,[1,2,3,4,5]),row:1}))},
+   {h:'10. 사회적 기능 제한 시간',items:[{k:'q10',t:'지난 한달 동안 신체적인 건강문제나 정서적인 문제로 인하여 사회적인 활동 (친구나 친척 등을 만나는)을 하지 못한 경우가 얼마나 자주 있었습니까?',...opt(['언제나 그랬다','대부분 그랬다','어느 정도 시간동안 그랬다','약간의 시간동안 그랬다','거의 그렇지 않았다'],[1,2,3,4,5]),row:1}]},
+   {h:'11. 일반적 건강 — 다음의 문항을 읽고 당신에게 해당하는 부분에 표시하여 주십시오.',items:SF36_T11.map((t,i)=>({k:'q11_'+(i+1),t,no:i+1,...opt(SF_TF,[1,2,3,4,5]),row:1}))}],
+  score:(a)=>{const pos5=v=>v==null?null:(5-v)*25,neg5=v=>v==null?null:(v-1)*25;
+    const rc={q1:v=>pos5(v),q6:v=>pos5(v),q7:v=>v==null?null:(6-v)*20,q8:v=>pos5(v),q10:v=>neg5(v)};
+    SF36_T3.forEach((_,i)=>rc['q3_'+(i+1)]=v=>v==null?null:(v-1)*50);SF36_T4.forEach((_,i)=>rc['q4_'+(i+1)]=neg5);SF36_T5.forEach((_,i)=>rc['q5_'+(i+1)]=neg5);
+    [1,4,5,8].forEach(i=>rc['q9_'+i]=pos5);[2,3,6,7,9].forEach(i=>rc['q9_'+i]=neg5);rc.q11_1=neg5;rc.q11_3=neg5;rc.q11_2=pos5;rc.q11_4=pos5;
+    const mean=keys=>{const v=keys.map(k=>rc[k](a[k])).filter(x=>x!==null);return v.length?R1(v.reduce((s,x)=>s+x,0)/v.length):null;};
+    return [['PF 신체적 기능',mean(SF36_T3.map((_,i)=>'q3_'+(i+1)))],['RP 신체적 역할제한',mean(SF36_T4.map((_,i)=>'q4_'+(i+1)))],['BP 신체 통증',mean(['q7','q8'])],['GH 일반 건강',mean(['q1','q11_1','q11_2','q11_3','q11_4'])],['VT 활력',mean(['q9_1','q9_5','q9_7','q9_9'])],['SF 사회적 기능',mean(['q6','q10'])],['RE 정서적 역할제한',mean(SF36_T5.map((_,i)=>'q5_'+(i+1)))],['MH 정신 건강',mean(['q9_2','q9_3','q9_4','q9_6','q9_8'])],['건강 변화 (1–5)',a.q2??null]];}},
+ pd:{name:'신경병성 통증 조사지',sub:'painDETECT',intro:'지표 무릎의 통증에 대해 답해 주십시오.',
+  sections:()=>[
+   {h:'통증 VAS (0 = 통증이 없다 · 10 = 심하게 아프다)',items:[{k:'vas_rest',t:'Resting (쉴 때)',type:'scale',vals:[0,1,2,3,4,5,6,7,8,9,10]},{k:'vas_walk',t:'Walking (걸을 때)',type:'scale',vals:[0,1,2,3,4,5,6,7,8,9,10]}]},
+   {h:'1. 통증의 정도에 대한 평가 — 0 전혀 아니다 · 1 거의 아니다 · 2 약간 그렇다 · 3 어느 정도 그렇다 · 4 그렇다 · 5 매우 그렇다',items:PD_T.map((t,i)=>({k:'p'+(i+1),t,no:i+1,type:'scale',vals:[0,1,2,3,4,5]}))},
+   {h:'2. 통증의 양상',items:[{k:'pattern',t:'통증의 양상',...opt(['꾸준하게 통증이 있으며, 통증 정도가 약간씩 변한다. (0점)','꾸준하게 통증이 있으며, 통증 정도가 갑자기 심해질 때가 있다. (-1점)','통증이 없다가 갑자기 심하게 아플 때가 있다. (1점)','통증이 예측없이 심해졌다 약해졌다 하며, 안 아픈 적은 없다. (1점)'],[0,-1,1,1])}]},
+   {h:'3. 통증의 퍼짐',items:[{k:'radiate',t:'무릎의 통증이 종아리나 발 쪽으로 번져나간다. (+2점)',type:'yn',vals:[2,0]}]}],
+  score:(a)=>{let t=0;for(let i=1;i<=7;i++){if(a['p'+i]==null)return [['painDETECT 총점',null]];t+=a['p'+i];}if(a.pattern==null||a.radiate==null)return [['painDETECT 총점',null]];t+=a.pattern+a.radiate;
+    return [['VAS Resting / Walking',`${a.vas_rest??'—'} / ${a.vas_walk??'—'}`],['painDETECT 총점 (−1~38)',t],['판정',t<=12?'신경병성 거의 없음 (≤12)':t<=18?'불확실 (13–18)':'신경병성 통증 (≥19)']];}},
+ csi:{name:'중추신경 감작 조사지',sub:'Central Sensitization Inventory',intro:'본인이 해당하는 정도에 표시하세요. 0 전혀 아니다 · 1 거의 아니다 · 2 가끔 그렇다 · 3 자주 그렇다 · 4 항상 그렇다',
+  sections:()=>[{h:'Part A',items:CSI_T.map((t,i)=>({k:'c'+(i+1),t,no:i+1,type:'scale',vals:SC04}))},
+   {h:'Part B — 의사로부터 다음과 같은 질환을 진단받은 적이 있습니까? (잘 모르시면 비워 두시기 바랍니다.)',optional:true,items:CSI_DX.map((t,i)=>({k:'dx'+(i+1),t,type:'dx'}))}],
+  score:(a)=>{let t=0;for(let i=1;i<=25;i++){if(a['c'+i]==null)return [['CSI 총점',null]];t+=a['c'+i];}
+    return [['CSI 총점 (/100)',t],['판정',t<30?'Subclinical (0–29)':t<40?'Mild (30–39)':t<50?'Moderate (40–49)':t<60?'Severe (50–59)':'Extreme (60–100)']];}},
+ ikdc:{name:'IKDC',sub:'Subjective Knee Evaluation Form',intro:'지표 무릎에 대해 답해 주십시오.',
+  sections:()=>[{h:'',items:[
+   {k:'q1',t:'무릎이 아프지 않을 정도의 수준에서 가능한 최대의 활동은?',no:1,...opt(IK_ACT,[4,3,2,1,0])},
+   {k:'q2',t:'지난 4주간 통증의 양상은 어땠는가?',no:2,...opt(['0: 전혀 없다','3: 때때로 가끔','5: 때때로 규칙적으로','7: 때때로 자주 - 통증으로 인해 생활의 스타일(활동 정도)이 바뀌었다','10: 항상 있다'],[10,7,5,3,0])},
+   {k:'q3',t:'통증이 있다면 얼마나 심한가? VAS score (10 = 없다 · 0 = 참을 수 없이 심하다)',no:3,type:'scale',vals:[10,9,8,7,6,5,4,3,2,1,0]},
+   {k:'q4',t:'지난 4주간 무릎의 움직임은 어땠는가, 다치지 않은 다리처럼 부드러웠는가 아니면 뻣뻣해서 움직이기 힘들었는가?',no:4,...opt(['다치지 않은 쪽과 동일하다','다치지 않은 쪽과는 다르지만 움직이는 데에는 지장이 없다','뻣뻣해서 움직이기 힘들다(일생생활에 심한 지장을 준다)','다치지 않은 쪽과 다르고 움직이는데 불편함을 느낀다','매우 뻣뻣해서 견디기 힘들다(아예 구부리고 펴는 것이 불가한 정도)'],[4,3,2,1,0])},
+   {k:'q5',t:'무릎이 붓지 않을 정도의 수준에서 가능한 최대의 활동은?',no:5,...opt(IK_ACT,[4,3,2,1,0])},
+   {k:'q6',t:'지난 4주간 무릎 속에서 뭔가 걸리거나 하여 구부리고 펴는 데에 애로사항이 있었는가?',no:6,type:'yn',vals:[0,1]},
+   {k:'q7',t:'무릎에 힘이 빠지지 않을 정도의 수준에서 가능한 최대의 활동은?',no:7,...opt(IK_ACT,[4,3,2,1,0])},
+   {k:'q8',t:'위의 내용 등을 모두 고려하였을 때 평소에 가능한 최대의 활동은?',no:8,...opt(IK_ACT,[4,3,2,1,0])},
+   ...IK9.map((t,i)=>({k:'q9'+'abcdefghi'[i],t:'9'+'abcdefghi'[i]+'. '+t,...opt(['Not at all','Minimal','Moderate','Extreme','Unable'],[4,3,2,1,0]),row:1})),
+   {k:'q10',t:'다리를 다치기 이전에는 어땠는가? 일상생활을 하는데 문제가 없었는가? (0 = 일상생활 불가 · 10 = 문제 없음)',no:10,type:'scale',vals:[0,1,2,3,4,5,6,7,8,9,10]},
+   {k:'q11',t:'다리를 다치고 난 이후 현재의 상태는 어떠한가? 일상생활을 하는데 문제가 있는가? (0 = 일상생활 불가 · 10 = 문제 없음)',no:11,type:'scale',vals:[0,1,2,3,4,5,6,7,8,9,10]}]}],
+  score:(a)=>{const ks=['q1','q2','q3','q4','q5','q6','q7','q8',...'abcdefghi'.split('').map(c=>'q9'+c),'q11'];let t=0;for(const k of ks){if(a[k]==null)return [['IKDC',null]];t+=a[k];}
+    return [['IKDC raw (/87)',t],['IKDC score (/100)',R1(t/87*100)],['다치기 이전 기능 (0–10)',a.q10??null]];}},
+ koos:{name:'KOOS',sub:'Knee Injury and Osteoarthritis Outcome Score',intro:'이 설문지는 환자의 입장에서 느끼는 무릎 관절의 상태에 대한 질문입니다. 각각의 질문에 대해 가장 적당한 하나의 항목에 대해서만 표기해 주십시오. (항목별점수는 각각 0점~4점 입니다.)',
+  sections:()=>[
+   {h:'증상(Symptoms) — 지난 일주일 동안 당신의 무릎 관절의 증상에 대해 답해주시기 바랍니다.',items:KO_S.map((t,i)=>({k:'s'+(i+1),t,no:'S'+(i+1),...opt(i<3?KO_NONE:i<5?KO_ALW:KO_STIFF),row:1}))},
+   {h:'통증(Pain) — 최근 일주일 동안 다음 활동 시 느끼는 무릎 통증은 어느 정도였습니까?',items:KO_P.map((t,i)=>({k:'p'+(i+1),t,no:'P'+(i+1),...opt(i===0?KO_FREQ:KO_PAIN),row:1}))},
+   {h:'일상 생활 기능(Function, Daily Living) — 최근 일주일 동안 아래의 활동 시 당신의 무릎으로 인해 겪었던 어려움의 정도를 표기해 주십시오.',items:KO_A.map((t,i)=>({k:'a'+(i+1),t,no:'A'+(i+1),...opt(KO_DIFF),row:1}))},
+   {h:'운동 및 놀이 기능(Function, Sports and Recreational Activities)',items:KO_SP.map((t,i)=>({k:'sp'+(i+1),t,no:'SP'+(i+1),...opt(KO_DIFF),row:1}))},
+   {h:'삶의 질(Quality of Life)',items:KO_Q.map(([t,l],i)=>({k:'q'+(i+1),t,no:'Q'+(i+1),...opt(l),row:1}))}],
+  score:(a)=>{const sc=(pre,cnt)=>{let t=0;for(let i=1;i<=cnt;i++){if(a[pre+i]==null)return null;t+=a[pre+i];}return R1(100-t/cnt*25);};
+    const r=[['Symptoms',sc('s',7)],['Pain',sc('p',9)],['ADL',sc('a',17)],['Sport/Rec',sc('sp',5)],['QoL',sc('q',4)]];const v=r.map(x=>x[1]);r.push(['KOOS 평균 (5 subscale)',v.every(x=>x!==null)?R1(v.reduce((s,x)=>s+x,0)/5):null]);return r;}},
+ lysholm:{name:'Lysholm Score',sub:'',intro:'지표 무릎에 대해 답해 주십시오.',
+  sections:()=>[{h:'',items:LY.map(([t,o],i)=>({k:'l'+(i+1),t,no:i+1,type:'opts',labels:o.map(x=>x[1]),vals:o.map(x=>x[0]),pts:1}))},
+   {h:'지난 24시간 동안의 통증 여부 (VAS, 0 = 없음 · 10 = 최악)',items:[{k:'vas_R',t:'Rt. Knee VAS',type:'scale',vals:[0,1,2,3,4,5,6,7,8,9,10]},{k:'vas_L',t:'Lt. Knee VAS',type:'scale',vals:[0,1,2,3,4,5,6,7,8,9,10]}]}],
+  score:(a)=>{let t=0;for(let i=1;i<=8;i++){if(a['l'+i]==null)return [['Lysholm Total',null]];t+=a['l'+i];}return [['Lysholm Total (/100)',t],['VAS Rt / Lt',`${a.vas_R??'—'} / ${a.vas_L??'—'}`]];}}
+};
+const ans={};for(const k in INST)ans[k]={};
+let use={};
+
+// ===================== 렌더링 (데이터 → DOM) =====================
+function buildInst(id){const I=INST[id];const pg=document.createElement('div');pg.className='page hidden';pg.dataset.page=id;
+  pg.innerHTML=`<section class="card"><div class="intro"><b>${I.name}</b> ${I.sub?'· '+I.sub:''}<br>${I.intro}</div></section>`;
+  I.sections().forEach(sec=>{const s=document.createElement('section');s.className='card';if(sec.h)s.innerHTML=`<h2><b style="font-weight:600;font-size:15px;line-height:1.4">${sec.h}</b></h2>`;
+    sec.items.forEach(it=>{const sd=it.side&&I.bilateral?sides():[''];sd.forEach(side=>{const key=side?it.k+'_'+side:it.k;const q=document.createElement('div');q.className='q';q.dataset.inst=id;q.dataset.key=key;
+      let html=`<div class="t">${it.no!==undefined?`<span class="no">${it.no}.</span>`:''}<span>${it.t}</span></div>`;if(side)html+=`<div class="sidelab">${SIDE_KO[side]} 무릎</div>`;
+      if(it.type==='scale')html+=`<div class="scale">${it.vals.map(v=>`<button data-v="${v}">${v}</button>`).join('')}</div>`;
+      else if(it.type==='opts')html+=`<div class="opts${it.row?' row':''}">${it.labels.map((l,i)=>`<button class="opt" data-v="${it.vals[i]}">${l}${it.pts?`<span class="pt">${it.vals[i]}</span>`:''}</button>`).join('')}</div>`;
+      else if(it.type==='yn')html+=`<div class="seg" style="max-width:260px"><button data-v="${it.vals[0]}">예</button><button data-v="${it.vals[1]}">아니오</button></div>`;
+      else if(it.type==='dx')html=`<div class="dx"><span>${it.t}</span><div class="seg"><button data-v="0">아니오</button><button data-v="1">예</button></div><input type="number" placeholder="진단연도" inputmode="numeric" data-year="${key}"></div>`;
+      q.innerHTML=html;q.querySelectorAll('button[data-v]').forEach(b=>b.onclick=()=>{ans[id][key]=+b.dataset.v;render();});
+      const yr=q.querySelector('input[data-year]');if(yr)yr.addEventListener('input',e=>{ans[id][key+'_yr']=e.target.value;});
+      s.appendChild(q);});});
+    pg.appendChild(s);});
+  const sc=document.createElement('section');sc.className='card';sc.innerHTML=`<h2><b>${I.name} 점수</b></h2><div id="sc_${id}"></div>`;pg.appendChild(sc);
+  return pg;}
+function buildAll(){$('#pages').innerHTML='';for(const id in INST)$('#pages').appendChild(buildInst(id));}
+function missingIn(id){let m=0;$$(`.page[data-page=${id}] .q`).forEach(q=>{if(q.querySelector('.dx'))return;if(ans[id][q.dataset.key]==null)m++;});return m;}
+
+// ===================== 흐름 =====================
+let pages=['info','done'],cur=0;
+const PT={info:'환자 정보',done:'완료'};
+const visitLabel=()=>{const v=(VISITS[seg.track]||[]).find(x=>x[0]===seg.visit);return v?v[1]:'';};
+function buildPages(){pages=['info'];(TRACK_INST[seg.track]||[]).forEach(i=>{if(use[i])pages.push(i);});pages.push('done');}
+function renderInfo(){const vs=VISITS[seg.track]||[];$('#visitSeg').innerHTML=vs.map(([v,l])=>`<button data-v="${v}">${l}</button>`).join('');$$('#visitSeg button').forEach(b=>b.onclick=()=>{seg.visit=b.dataset.v;render();});
+  const ins=TRACK_INST[seg.track]||[];$('#useBox').innerHTML=ins.map(i=>`<label class="chk"><input type="checkbox" data-use="${i}" ${use[i]!==false?'checked':''}>${INST[i].name}</label>`).join('');
+  $$('#useBox input').forEach(c=>c.onchange=()=>{use[c.dataset.use]=c.checked;});ins.forEach(i=>{if(use[i]===undefined)use[i]=true;});}
+function missing(p){return p==='info'?(($('#pid').value&&seg.side&&seg.track&&seg.visit)?0:1):p==='done'?0:missingIn(p);}
+function go(i){cur=Math.max(0,Math.min(pages.length-1,i));$$('.page').forEach(p=>p.classList.toggle('hidden',p.dataset.page!==pages[cur]));window.scrollTo(0,0);if(pages[cur]==='done')onDone();render();}
+function render(){
+  $$('.seg[data-key]').forEach(s=>s.querySelectorAll('button').forEach(b=>b.classList.toggle('on',seg[s.dataset.key]===b.dataset.v)));
+  $$('.q[data-inst]').forEach(q=>{const v=ans[q.dataset.inst][q.dataset.key];q.querySelectorAll('button[data-v]').forEach(b=>b.classList.toggle('on',v!=null&&+b.dataset.v===v));});
+  for(const id in INST){const el=$('#sc_'+id);if(el)el.innerHTML=INST[id].score(ans[id]).map(([l,v])=>`<div class="sub"><span>${l}</span><b>${v??'—'}</b></div>`).join('');}
+  $('#steps').innerHTML=pages.map((p,i)=>`<span class="${i<cur?'done':i===cur?'cur':''}"></span>`).join('');
+  const p=pages[cur],m=missing(p);
+  $('#stepTag').textContent=`${cur+1} / ${pages.length} · ${PT[p]||(INST[p]||{}).name||''}`;
+  $('#missTag').textContent=m?(p==='info'?'등록번호·무릎·구분·시점 필요':`미응답 ${m}개`):'';
+  $('#bNext').disabled=m>0;$('#bNext').textContent=cur===pages.length-2?'완료':'다음 →';
+  $('#bPrev').classList.toggle('hidden',cur===0||p==='done');$('#bNext').classList.toggle('hidden',p==='done'||p==='info');
+  $('.bar').classList.toggle('hidden',p==='done'&&MODE==='patient');
+  if(p==='done')renderSummary();
+}
+$('#bNext').onclick=()=>go(cur+1);$('#bPrev').onclick=()=>go(cur-1);
+$('#bStart').onclick=()=>{if(missing('info')){alert('등록번호, 지표 무릎, 구분, 시점을 모두 입력하세요.');return;}buildAll();buildPages();go(1);};
+$$('.seg[data-key]').forEach(s=>s.querySelectorAll('button').forEach(b=>b.onclick=()=>{const k=s.dataset.key;seg[k]=b.dataset.v;if(k==='track'){seg.visit='';use={};renderInfo();}render();}));
+['pid','pname'].forEach(id=>$('#'+id).addEventListener('input',render));
+
+// ===================== 데이터 =====================
+const info=()=>({pid:$('#pid').value,name:$('#pname').value,date:$('#pdate').value,side:seg.side,track:seg.track,visit:seg.visit});
+function record(){const r=info();const o={...r,side_ko:SIDE_KO[r.side]||'',track_ko:TRACK_KO[r.track]||'',visit_ko:visitLabel()};
+  for(const id of pages.filter(p=>INST[p])){for(const k in ans[id])o[id+'_'+k]=ans[id][k]??'';INST[id].score(ans[id]).forEach(([l,v],i)=>o[id+'_score'+(i+1)+'_'+l.replace(/[^\w가-힣]+/g,'_')]=v??'');}
+  o.mode=MODE;o.saved_at=new Date().toLocaleString('sv-SE',{timeZone:'Asia/Seoul'});return o;}
+function emrText(){const r=info(),L=[];
+  for(const id of pages.filter(p=>INST[p])){const I=INST[id];L.push(`[${I.name}] ${SIDE_KO[r.side]||''} 무릎 · ${visitLabel()} · ${r.date}`);
+    I.sections().forEach(sec=>sec.items.forEach(it=>{const sd=it.side&&I.bilateral?sides():[''];sd.forEach(side=>{const key=side?it.k+'_'+side:it.k;const v=ans[id][key];let lab=v;
+      if(it.type==='opts'&&v!=null){const i=it.vals.indexOf(v);lab=it.labels[i]+(it.pts?'':` (${v})`);}if(it.type==='yn'&&v!=null)lab=v===it.vals[0]?'예':'아니오';if(it.type==='dx'){lab=v==null?'':(v?'예'+(ans[id][key+'_yr']?' ('+ans[id][key+'_yr']+')':''):'아니오');}
+      L.push(`${it.no!==undefined?it.no+'. ':''}${it.t}${side?' ['+SIDE_KO[side]+']':''} : ${lab??''}`);});}));
+    I.score(ans[id]).forEach(([l,v])=>L.push(`${l} : ${v??''}`));L.push('');}
+  return L.join('\n');}
+function renderSummary(){const r=info();$('#sumMeta').textContent=`${r.pid} ${r.name} · ${TRACK_KO[r.track]||''} · ${SIDE_KO[r.side]||''} 무릎 · ${visitLabel()} · ${r.date}`;let h='';
+  for(const id of pages.filter(p=>INST[p])){h+=`<tr class="h"><td colspan="2">${INST[id].name}</td></tr>`+INST[id].score(ans[id]).map(([l,v])=>`<tr><td>${l}</td><td>${v??'—'}</td></tr>`).join('');}
+  $('#sumTbl').innerHTML=h;}
+
+// ===================== URL / QR =====================
+const baseURL=()=>location.origin+location.pathname;
+const answerString=()=>JSON.stringify(Object.fromEntries(pages.filter(p=>INST[p]).map(p=>[p,ans[p]])));
+const useString=()=>Object.keys(use).filter(k=>use[k]).join(',');
+const patientURL=()=>{const r=info();return baseURL()+'?'+new URLSearchParams({mode:'patient',...r,u:useString()});};
+const resultURL=()=>{const r=info();return baseURL()+'?'+new URLSearchParams({...r,u:useString(),a:answerString()});};
+const makeQR=(el,t)=>{el.innerHTML='';new QRCode(el,{text:t,width:240,height:240,correctLevel:QRCode.CorrectLevel.L});};
+$('#bQR').onclick=()=>{if(!$('#pid').value||!seg.track){alert('등록번호와 구분을 먼저 입력하세요.');return;}$('#qrbox').classList.remove('hidden');makeQR($('#qr'),patientURL());$('#qrurl').textContent=patientURL();};
+$('#bLink').onclick=()=>{if(!$('#pid').value||!seg.track){alert('등록번호와 구분을 먼저 입력하세요.');return;}navigator.clipboard.writeText(patientURL()).then(()=>{$('#bLink').textContent='복사됨';setTimeout(()=>$('#bLink').textContent='링크 복사',1200);});};
+
+// ===================== 완료 / 저장 =====================
+const dl=(name,text,type)=>{const el=document.createElement('a');el.href=URL.createObjectURL(new Blob([text],{type}));el.download=name;el.click();};
+const fname=ext=>{const r=info();return `KNEE_${r.pid||'noid'}_${r.track||''}_${r.visit||'visit'}_${r.date}.${ext}`;};
+$('#bJSON').onclick=()=>dl(fname('json'),JSON.stringify(record(),null,2),'application/json');
+$('#bCSV').onclick=()=>{const r=record();dl(fname('csv'),'﻿'+Object.keys(r).join(',')+'\n'+Object.values(r).map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','),'text/csv');};
+$('#bCopy').onclick=()=>navigator.clipboard.writeText(emrText()).then(()=>{$('#bCopy').textContent='복사됨';setTimeout(()=>$('#bCopy').textContent='EMR 형식 복사',1200);});
+$('#bPrint').onclick=()=>window.print();$('#bNew').onclick=()=>location.href=baseURL();
+function setSave(state,msg){$('#saveBox').className='savebox '+state;$('#saveMsg').textContent=msg;$('#sendHint').textContent=msg;}
+async function send(){if(!SAVE_URL){setSave('err','저장 설정이 되어 있지 않습니다 (SAVE_URL 비어 있음)');return false;}
+  setSave('','저장 중…');const r=record();
+  try{const res=await fetch(SAVE_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(r)});const t=(await res.text()).trim();
+    if(res.ok&&t==='ok'){setSave('ok',`✅ 저장 완료 — 등록번호 ${r.pid} · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}`);return true;}
+    setSave('err','❌ 저장 실패 (서버 응답: '+(t||res.status)+') — 다시 저장을 누르거나 QR로 전달하세요');return false;}
+  catch(e){setSave('err','❌ 저장 실패 (인터넷 연결 확인) — 다시 저장을 누르거나 QR로 전달하세요');return false;}}
+$('#bSend').onclick=send;$('#bRetry').onclick=send;$('#bShowQR').onclick=()=>{$('#qr2box').classList.remove('hidden');makeQR($('#qr2'),resultURL());};
+function onDone(){const patient=MODE==='patient';$('#staffCard').classList.toggle('hidden',patient);$('#toolCard').classList.toggle('hidden',patient);$('#qr2box').classList.add('hidden');
+  $('#doneMsg').textContent=patient?'답변이 병원으로 전송됩니다. 아래 "저장 완료"를 확인한 뒤 창을 닫으셔도 됩니다.':'태블릿을 직원에게 돌려주세요.';send();
+  if(AUTO_RESET_SEC&&!patient)setTimeout(()=>location.href=baseURL(),AUTO_RESET_SEC*1000);}
+
+// ===================== 초기화 =====================
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;};
+$('#pdate').value=today();
+if(P.get('pid'))$('#pid').value=P.get('pid');if(P.get('name'))$('#pname').value=P.get('name');if(P.get('date'))$('#pdate').value=P.get('date');
+['side','track','visit'].forEach(k=>{if(P.get(k))seg[k]=P.get(k);});
+renderInfo();if(P.get('u')){const s=new Set(P.get('u').split(','));(TRACK_INST[seg.track]||[]).forEach(i=>use[i]=s.has(i));renderInfo();}
+if(MODE==='patient'){$('#modeTag').textContent='환자 입력';$('#qrCard').classList.add('hidden');if(P.get('pid')){$('#pid').readOnly=true;$('#pname').readOnly=true;}else{$('#pid').placeholder='진료카드/접수증의 등록번호';}$('#bStart').textContent='설문 시작 →';}
+if(P.get('a')){try{const a=JSON.parse(P.get('a'));buildAll();for(const k in a)ans[k]=a[k];buildPages();go(pages.length-1);}catch(e){go(0);}}else go(0);
+})();
+</script></body></html>
